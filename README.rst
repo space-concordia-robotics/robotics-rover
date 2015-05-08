@@ -1,7 +1,7 @@
-ROBOTICS NETWORKING
+ROBOTICS ROVER
 ========
 
-Robotics networking stuff.
+All the rover core stuff go here.
 
 To install, run:
 
