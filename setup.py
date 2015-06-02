@@ -13,7 +13,7 @@ setup(
 
     description='',
     long_description=open('README.rst').read(),
-    # url='http://www.github.com/psyomn/pypsylbm',
+    url='http://www.github.com/space-concordia-robotics/robotics-rover',
     license='MIT',
 
     author='TBD',
