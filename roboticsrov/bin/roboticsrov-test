@@ -1,3 +1,9 @@
 #!/usr/bin/env python2.7
 
-print "potatoface"
+from roboticsrov.ucontroller_manager import UControllerManager 
+
+ucontr_manager = UControllerManager()
+
+ucontr_manager.run()
+
+
