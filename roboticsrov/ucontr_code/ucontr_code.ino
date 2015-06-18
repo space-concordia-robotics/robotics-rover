@@ -8,7 +8,7 @@ void setup()
   // Usart to talk to and from the parent board.
   Serial.begin(9600);  
   // Usart to control the left side of motors
-//  Serial1.begin(9600);
+  Serial1.begin(9600);
   //Usart to control the right side of motors
 //  Serial2.begin(9600);
 }
@@ -34,16 +34,16 @@ motor 2
 void loop()
 {
  
-  if (Serial.available() > 0) // &&
- //     Serial1.available() > 0 &&
+  if (Serial.available() > 0 &&
+      Serial1.available() > 0) //&&
  //     Serial2.available() > 0)
   {
     unsigned char command = Serial.read();
     
     // Send command back to parent board.
-    int bytesSent = Serial.print(command);
+//    int bytesSent = Serial.print(command);
     // Update command to motors.
-//    Serial1.write(command);
+    int bytesSent = Serial1.print(command);
 //    Serial2.write(command);
     
   }
