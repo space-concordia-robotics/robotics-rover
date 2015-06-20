@@ -34,18 +34,19 @@ motor 2
 void loop()
 {
  
-  if (Serial.available() > 0 &&
-      Serial1.available() > 0) //&&
+  if (Serial.available() > 0)
+//      Serial1.available() > 0) //&&
  //     Serial2.available() > 0)
   {
-    unsigned char command = Serial.read();
     
+    int command = Serial.parseInt();
+     
     // Send command back to parent board.
-//    int bytesSent = Serial.print(command);
+    Serial.println(command, DEC);
     // Update command to motors.
-    int bytesSent = Serial1.print(command);
+    Serial1.write(command);
 //    Serial2.write(command);
-    
+     
   }
   
 }

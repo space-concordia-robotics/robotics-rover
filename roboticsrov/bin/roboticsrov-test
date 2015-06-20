@@ -6,14 +6,14 @@ from roboticsnet.rover_listener import RoverListener
 from roboticsnet.command_hook import CommandHook
 
 import roboticsrov
-from roboticsrov.ucontroller_manager import UControllerManager 
+from roboticsrov.umanager import UManager 
 
-ucontrManager = UControllerManager()
+uManager = UManager()
 
 cmdHook = CommandHook(
-    forward=ucontrManager.forward,
-    reverse=ucontrManager.reverse,
-    turn=ucontrManager.turn)
+    forward=uManager.forward,
+    reverse=uManager.reverse,
+    turn=uManager.turn)
 
 server = RoverListener(hooks=cmdHook)
 
