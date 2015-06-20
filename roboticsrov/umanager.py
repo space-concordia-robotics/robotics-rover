@@ -79,23 +79,87 @@ class UManager:
 
         return result
     
+    def validateVal(self, direction, val):
+        """ Validates the value before being sent to 
+            the microcontroller.
+
+            Returns: true when value is within range else false
+        """
+        if direction == 'forward':
+            if val>=65 and val<=127 or val>=193 and val<=255:
+                return True
+            else:
+                return False
+        
+        elif direction == 'reverse':
+            if val>=1 and val<=63 or val>=128 and val<=191:
+                return True
+            else:
+                return False
+
+        elif direction == 'turnLeft':
+            if val>=0 and val<=255:
+                return True
+            else:
+                return False
+        
+        elif direction == 'turnRight':
+            if val>=0 and val<=255:
+                return True
+            else:
+                return False
+
+        elif direction == 'stop':
+            if val==0 or val==64 or val==192:
+                return True
+            else:
+                return False
+
+        else:
+            print "Wtf. What are you doing here? Value out of range."
+            return False
+
+
+
     def forward(self, params):
         """ Send command to move forward. """
-        val = params['value']
-        print "Moving forward by ", val
-        self.ucontrConn.write(chr(val))
+        value = params['value']
+
+        if self.validateVal('forward', value):
+            print "Moving forward by ", value
+            self.uConn.write(chr(value))
 
     def reverse(self, params):
         """ Send command to reverse. """
-        val = params['value']
-        print "Reversing by ", val
-        self.ucontrConn.write(chr(val))
+        value = params['value']
 
-    def turn(self, params):
-        """ Send command to turn. """
-        val = params['value']
-        print "Turning by ", val
-        self.ucontrConn.write(chr(val))
+        if self.validateVal('reverse', value):
+            print "Reversing by ", value
+            self.uConn.write(chr(value))
+
+    def turnLeft(self, params):
+        """ Send command to turn left. """
+        value = params['value']
+
+        if self.validateVal('turnLeft', value):
+            print "Turning left with value ", value
+            self.uConn.write(chr(value))
+
+    def turnRight(self, params):
+        """ Send command to turn right."""
+        value = params['value']
+
+        if self.validateVal('turnRight', value):
+            print "Turning right with value " , value
+            self.uConn.write(chr(value))
+
+    def stop(self, params):
+        """ Send command to stop motors."""
+        value = params['value']
+        
+        if self.validateVal('stop', value):
+            print "Stopping motor with value", value
+            self.uConn.write(chr(value))
 
 '''
     def run(self):

@@ -13,7 +13,9 @@ uManager = UManager()
 cmdHook = CommandHook(
     forward=uManager.forward,
     reverse=uManager.reverse,
-    turn=uManager.turn)
+    turnLeft=uManager.turnLeft,
+    turnRight=uManager.turnRight,
+    stop=uManager.stop)
 
 server = RoverListener(hooks=cmdHook)
 
