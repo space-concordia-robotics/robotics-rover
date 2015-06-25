@@ -10,9 +10,14 @@ def _startVideo():
 	print "Starting stream from startvid!"
 	os.system("cvlc v4l:///dev/video0 --sout '#transcode{vcodec=mp4v,vb=800,acodec=mpga,ab=128}:standard{access=http,mux=ts,dst=:8080}'")
 
+def _stopVideo():
+	os.system("killall vlc")
+	print "Stopping stream from stopvid!"
+
 # First you would need to define your hooks using CommandHook
 cmd_hook = CommandHook(
         startVideo=_startVideo
+        stopVideo=_stopVideo
         )
 
 l = RoverListener(hooks=cmd_hook)
