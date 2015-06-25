@@ -16,7 +16,7 @@ def _stopVideo():
 
 # First you would need to define your hooks using CommandHook
 cmd_hook = CommandHook(
-        startVideo=_startVideo
+        startVideo=_startVideo,
         stopVideo=_stopVideo
         )
 
