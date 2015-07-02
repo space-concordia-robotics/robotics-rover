@@ -1,18 +1,27 @@
 #!/usr/bin/env python2.7
 
-import os
+import subprocess
 import roboticsnet
 from roboticsnet.command_hook import CommandHook
 from roboticsnet.rover_listener import RoverListener
 
+videoStreamProcess = None
+isStreaming = False
+
 def _startVideo():
-	os.system("killall vlc")
+	global videoStreamProcess, isStreaming
 	print "Starting stream from startvid!"
-	os.system("cvlc v4l:///dev/video0 --sout '#transcode{vcodec=mp4v,vb=800,acodec=mpga,ab=128}:standard{access=http,mux=ts,dst=:8080}'")
+	isStreaming = True
+	videoStreamProcess = subprocess.Popen(['cvlc', 'v4l:///dev/video0', '--sout', '#transcode{vcodec=WMV2,vb=1500}:standard{access=http,mux=ts,dst=:8080}'])
 
 def _stopVideo():
-	os.system("killall vlc")
-	print "Stopping stream from stopvid!"
+	global videoStreamProcess, isStreaming
+	if (isStreaming):
+		print "Stopping stream from stopvid!"
+		videoStreamProcess.kill()
+		isStreaming = False
+	else:
+		print "No stream to stop!"
 
 # First you would need to define your hooks using CommandHook
 cmd_hook = CommandHook(
@@ -20,7 +29,7 @@ cmd_hook = CommandHook(
         stopVideo=_stopVideo
         )
 
-l = RoverListener(hooks=cmd_hook)
+l = RoverListener(hooks=cmd_hook,default_port=8080)
 
 print roboticsnet.__appname__, " ",  roboticsnet.__version__
 print "Starting command dispatcher..."
