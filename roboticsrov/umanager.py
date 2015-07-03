@@ -1,8 +1,6 @@
 import serial
 import sys
 import glob
-import binascii
-import struct
 import time
 
 class UManager:
