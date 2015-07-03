@@ -95,34 +95,16 @@ class UManager:
             Returns: true when value is within range else false
         """
         if direction == 'forward':
-            if val>=65 and val<=127 or val>=193 and val<=255:
-                return True
-            else:
-                return False
-        
-        elif direction == 'reverse':
-            if val>=1 and val<=63 or val>=128 and val<=191:
-                return True
-            else:
-                return False
+            return True if val in range(65, 128) or val in range(193, 256) else False
 
-        elif direction == 'turnLeft':
-            if val>=0 and val<=255:
-                return True
-            else:
-                return False
-        
-        elif direction == 'turnRight':
-            if val>=0 and val<=255:
-                return True
-            else:
-                return False
+        elif direction == 'reverse':
+            return True if val in range(1, 64) or val in range(128, 192) else False
+
+        elif direction == 'turnLeft' or direction == 'turnRight':
+            return True if val in range(0, 256) else False
 
         elif direction == 'stop':
-            if val==0 or val==64 or val==192:
-                return True
-            else:
-                return False
+            return True if val==0 or val==64 or val==192 else False
 
         else:
             print "Wtf. What are you doing here? Value out of range."
@@ -144,14 +126,13 @@ class UManager:
 #            print v
 #            print ord(v)
 
-
     def reverse(self, params):
         """ Send command to reverse. """
         value = params['value']
 
         if self.validateVal('reverse', value):
             print "Reversing by ", value
-            self.uConn.write(chr(value))
+            self.sendCommand(value)
 
     def turnLeft(self, params):
         """ Send command to turn left. """
@@ -159,7 +140,7 @@ class UManager:
 
         if self.validateVal('turnLeft', value):
             print "Turning left with value ", value
-            self.uConn.write(chr(value))
+            self.sendCommand(value)
 
     def turnRight(self, params):
         """ Send command to turn right."""
@@ -167,7 +148,7 @@ class UManager:
 
         if self.validateVal('turnRight', value):
             print "Turning right with value " , value
-            self.uConn.write(chr(value))
+            self.sendCommand(value)
 
     def stop(self, params):
         """ Send command to stop motors."""
@@ -175,4 +156,4 @@ class UManager:
         
         if self.validateVal('stop', value):
             print "Stopping motor with value", value
-            self.uConn.write(chr(value))
+            self.sendCommand(value)
