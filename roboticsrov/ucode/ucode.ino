@@ -9,8 +9,6 @@ void setup()
   Serial.begin(9600);  
   // Usart to control the left side of motors
   Serial1.begin(9600);
-  //Usart to control the right side of motors
-//  Serial2.begin(9600);
 }
 
 /* 
@@ -30,7 +28,33 @@ motor 2
 
 0 stop all motors
 */
+
+/*
+
+Protocol for micro <--> uManager ????
+
+"m" + value for movement
+"r" + sensor to read sensor data  or have a timed interval to send data to  uManager
+...
+
+unsigned long readCommand()
+{
+  union u_tag
+  {
+    byte b[4];
+    unsigned long ulval;
+  } u;
   
+  u.b[0] = Serial.read();
+  u.b[1] = Serial.read();
+  u.b[2] = Serial.read();
+  u.b[3] = Serial.read();
+  return u.ulval;
+}
+*/
+
+static char input[2];
+ 
 void loop()
 {
  
@@ -39,15 +63,28 @@ void loop()
  //     Serial2.available() > 0)
   {
     
-    int command = Serial.parseInt();
+//    int command = Serial.parseInt();
+//    static char c = Serial.read();
+//    static char c = Serial.read();
+    
+//    int command = atoi(&c);
+     
      
     // Send command back to parent board.
-    Serial.println(command, DEC);
+//    Serial.println(command, DEC);
     // Update command to motors.
-    Serial1.write(command);
+//    Serial1.write(command);
 //    Serial2.write(command);
-     
-  }
   
+   
+    input[0] = Serial.read ();
+    input[1] = '\0';
+    int testVal = atoi(input);
+
+    // Write back to serial port for debugging
+    Serial.print(testVal);
+    // Write value to motors
+    Serial1.write(testVal); 
+  }
 }
   

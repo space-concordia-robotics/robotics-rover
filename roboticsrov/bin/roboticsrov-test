@@ -12,7 +12,7 @@ uManager = UManager()
 
 cmdHook = CommandHook(
     forward=uManager.forward,
-    reverse=uManager.reverse,
+    reverse=uManager.reverse,  
     turnLeft=uManager.turnLeft,
     turnRight=uManager.turnRight,
     stop=uManager.stop)
@@ -22,4 +22,3 @@ server = RoverListener(hooks=cmdHook)
 print roboticsrov.__appname__, " ", roboticsrov.__version__
 print "Starting command dispatcher..."
 server.listen()
-

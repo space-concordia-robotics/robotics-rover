@@ -1,9 +1,11 @@
 import serial
 import sys
 import glob
+import binascii
+import struct
+import time
 
 class UManager:
-
     # Create the serial connections we need.
     def __init__(self,
                  bps=9600,
@@ -14,20 +16,23 @@ class UManager:
                  bytesize=serial.EIGHTBITS):
 
         self.baudrate = bps
-        self.port = port
+         #   self.port = port
+        self.port = '/dev/ttyACM0'
         self.timeout = timeout
         self.parity = parity
         self.stopbits = stopbits
         self.bytesize = bytesize
         self.uConn = None
 
+        
         # Try to connect to port.
-        portList = self.serial_ports()
-
+        """     portList = self.serial_ports()
+        
         if portList == None:
             sys.exit("No ports found.") 
         else:
             self.port = portList[0]
+        """
 
         try:
             self.uConn = serial.Serial(
@@ -37,10 +42,14 @@ class UManager:
                                 self.parity,
                                 self.stopbits,
                                 self.timeout)
+            self.connected = True
             print "Connected to port.", self.port
         except:
             self.connected = False
             sys.exit("Failed connecting to port.")
+
+        print "Waiting some time for microcontroller's serial to startup..."
+        time.sleep(5)	# 5 seconds
 
     def __del__(self):
         # Close the connection.
@@ -119,7 +128,9 @@ class UManager:
             print "Wtf. What are you doing here? Value out of range."
             return False
 
-
+    def sendCommand(self, value):
+        numBytesSent = self.uConn.write(chr(value))
+        print "Number of bytes sent: ", numBytesSent
 
     def forward(self, params):
         """ Send command to move forward. """
@@ -127,7 +138,12 @@ class UManager:
 
         if self.validateVal('forward', value):
             print "Moving forward by ", value
-            self.uConn.write(chr(value))
+            self.sendCommand(value)
+
+#            v = self.uConn.read()
+#            print v
+#            print ord(v)
+
 
     def reverse(self, params):
         """ Send command to reverse. """
@@ -160,15 +176,3 @@ class UManager:
         if self.validateVal('stop', value):
             print "Stopping motor with value", value
             self.uConn.write(chr(value))
-
-'''
-    def run(self):
-        # Start of main loop.
-        print "Main loop running."
-        while x<10:
-            # Read one byte.
-            val = self.ucontrConn.readline(1)
-            print val
-            x += 1
-'''
-
