@@ -15,7 +15,7 @@ class UManager:
 
         self.baudrate = bps
          #   self.port = port
-        self.port = '/dev/ttyACM0'
+        self.port = '/dev/ttyACM1'
         self.timeout = timeout
         self.parity = parity
         self.stopbits = stopbits
@@ -110,6 +110,7 @@ class UManager:
 
     def sendCommand(self, value):
         numBytesSent = self.uConn.write(chr(value))
+        print "chr value: ", chr(value)
         print "Number of bytes sent: ", numBytesSent
 
     def forward(self, params):

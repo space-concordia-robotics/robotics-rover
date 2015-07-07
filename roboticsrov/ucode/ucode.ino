@@ -1,5 +1,7 @@
 const int LED_PIN = 13;
 
+static char input[5];
+
 void setup()
 {                
   // Initialize the digital pin as an output.
@@ -53,8 +55,6 @@ unsigned long readCommand()
 }
 */
 
-static char input[2];
- 
 void loop()
 {
  
@@ -77,14 +77,13 @@ void loop()
 //    Serial2.write(command);
   
    
-    input[0] = Serial.read ();
-    input[1] = '\0';
-    int testVal = atoi(input);
+    int val = Serial.read();
 
     // Write back to serial port for debugging
-    Serial.print(testVal);
+    Serial.println(val);
     // Write value to motors
-    Serial1.write(testVal); 
+    Serial1.write(val); 
+    
   }
 }
   
