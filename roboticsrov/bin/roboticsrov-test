@@ -1,10 +1,18 @@
 #!/usr/bin/env python2.7
 
-import serial
+import roboticsnet
+from roboticsnet.rover_listener import RoverListener
+from roboticsnet.command_hook import CommandHook
 
+import roboticsrov
+from roboticsrov.stream_manager import start_video, stop_video 
 
-ser = serial.Serial(0)  # Opens first serial port
+cmdHook = CommandHook(
+    startVideo=start_video,
+    stopVideo=stop_video,  
+    )
 
-print ser.name
-ser.write("hello")
-ser.close()
+server = RoverListener(hooks=cmdHook)
+
+print "Starting command dispatcher..."
+server.listen()
