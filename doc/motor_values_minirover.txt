@@ -1,0 +1,24 @@
+The mini rover's motors have the following raw range from the microcontroller manager:
+
+Motor 1 (right side)
+Forward:    [1-63] decreasing speed
+Stop:       [64]
+Reverse:    [65-127] increasing speed
+
+Motor 2 (left side)
+Reverse:    [128-191] decreasing speed
+Stop:       [192]
+Forward:    [193-255] increasing speed
+
+Note: we are not using the 128 max reverse speed
+
+The mini rover server should take the following commands:
+
+Reverse:
+    Takes an integer between 1 and 63 from slowest to fastest. Activates every motor.
+    
+Stop:
+    Takes no argument. Stops every motor.
+    
+Forward:
+    Takes an integer between 1 and 63 from slowest to fastest. Activates every motor.
