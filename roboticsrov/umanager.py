@@ -92,17 +92,8 @@ class UManager:
 
             Returns: true when value is within range else false
         """
-        if direction == 'forward':
-            return True if val in range(65, 128) or val in range(193, 256) else False
-
-        elif direction == 'reverse':
-            return True if val in range(1, 64) or val in range(128, 192) else False
-
-        elif direction == 'turnLeft' or direction == 'turnRight':
-            return True if val in range(0, 256) else False
-
-        elif direction == 'stop':
-            return True if val==0 or val==64 or val==192 else False
+        if direction == 'forward' or direction == "reverse" or direction == "turnLeft" or direction == "turnRight":
+            return True if val in range(1, 64) else False
 
         else:
             print "Wtf. What are you doing here? Value out of range."
@@ -119,11 +110,8 @@ class UManager:
 
         if self.validateVal('forward', value):
             print "Moving forward by ", value
-            self.sendCommand(value)
-
-#            v = self.uConn.read()
-#            print v
-#            print ord(v)
+            self.sendCommand(64 - value)
+            self.sendCommand(value + 192)
 
     def reverse(self, params):
         """ Send command to reverse. """
@@ -131,7 +119,8 @@ class UManager:
 
         if self.validateVal('reverse', value):
             print "Reversing by ", value
-            self.sendCommand(value)
+            self.sendCommand(value + 64)
+            self.sendCommand((64 - value) + 128)
 
     def turnLeft(self, params):
         """ Send command to turn left. """
@@ -139,7 +128,8 @@ class UManager:
 
         if self.validateVal('turnLeft', value):
             print "Turning left with value ", value
-            self.sendCommand(value)
+            self.sendCommand((64 - value) + 128)
+            self.sendCommand(64 - value)
 
     def turnRight(self, params):
         """ Send command to turn right."""
@@ -147,12 +137,10 @@ class UManager:
 
         if self.validateVal('turnRight', value):
             print "Turning right with value " , value
-            self.sendCommand(value)
+            self.sendCommand(value + 64)
+            self.sendCommand(value + 192)
 
     def stop(self, params):
         """ Send command to stop motors."""
-        value = params['value']
-        
-        if self.validateVal('stop', value):
-            print "Stopping motor with value", value
-            self.sendCommand(value)
+        print "Stopping motors."
+        self.sendCommand(0)
