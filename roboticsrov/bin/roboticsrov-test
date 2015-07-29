@@ -1,25 +1,11 @@
 #!/usr/bin/env python2.7
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ucontr_manager
 import roboticsnet
 from roboticsnet.rover_listener import RoverListener
 from roboticsnet.command_hook import CommandHook
 
 import roboticsrov
-<<<<<<< HEAD
 from roboticsrov.stream_manager import start_video, stop_video 
-
-cmdHook = CommandHook(
-    startVideo=start_video,
-    stopVideo=stop_video,  
-    )
-
-server = RoverListener(hooks=cmdHook)
-
-=======
 from roboticsrov.umanager import UManager 
 
 uManager = UManager()
@@ -29,11 +15,12 @@ cmdHook = CommandHook(
     reverse=uManager.reverse,  
     turnLeft=uManager.turnLeft,
     turnRight=uManager.turnRight,
-    stop=uManager.stop)
+    stop=uManager.stop,
+    startVideo=start_video,
+    stopVideo=stop_video)
 
 server = RoverListener(hooks=cmdHook)
 
 print roboticsrov.__appname__, " ", roboticsrov.__version__
->>>>>>> ucontr_manager
 print "Starting command dispatcher..."
 server.listen()
