@@ -15,7 +15,7 @@ class UManager:
 
         self.baudrate = bps
          #   self.port = port
-        self.port = '/dev/ttyACM1'
+        self.port = '/dev/ttyACM0'
         self.timeout = timeout
         self.parity = parity
         self.stopbits = stopbits
