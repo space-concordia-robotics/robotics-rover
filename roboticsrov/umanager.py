@@ -128,8 +128,8 @@ class UManager:
 
         if self.validateVal('turnLeft', value):
             print "Turning left with value ", value
-            self.sendCommand((64 - value) + 128)
-            self.sendCommand(64 - value)
+            self.sendCommand(1)
+            self.sendCommand(192+value)
 
     def turnRight(self, params):
         """ Send command to turn right."""
@@ -137,8 +137,8 @@ class UManager:
 
         if self.validateVal('turnRight', value):
             print "Turning right with value " , value
-            self.sendCommand(value + 64)
-            self.sendCommand(value + 192)
+            self.sendCommand(64-value)
+            self.sendCommand(255)
 
     def stop(self, params):
         """ Send command to stop motors."""
