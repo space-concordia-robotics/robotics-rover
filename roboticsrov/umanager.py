@@ -14,8 +14,7 @@ class UManager:
                  bytesize=serial.EIGHTBITS):
 
         self.baudrate = bps
-         #   self.port = port
-        self.port = '/dev/ttyACM0'
+        self.port = port
         self.timeout = timeout
         self.parity = parity
         self.stopbits = stopbits
@@ -24,13 +23,14 @@ class UManager:
 
         
         # Try to connect to port.
-        """     portList = self.serial_ports()
-        
+        portList = self.serial_ports()
+        print portList
+
         if portList == None:
             sys.exit("No ports found.") 
         else:
-            self.port = portList[0]
-        """
+            port_selected = int(raw_input("Which port do you want to connect to for the microcontroller? (starting from index0)"))
+            self.port = portList[port_selected]
 
         try:
             self.uConn = serial.Serial(
