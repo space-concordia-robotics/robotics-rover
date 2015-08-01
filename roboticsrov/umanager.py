@@ -22,7 +22,7 @@ class UManager:
         self.uConn = None
 
         
-        # Try to connect to port.
+        # Try to connect to port. If no connection is found, verify that the user is in the 'dialout' group - this enables access to serial out.
         portList = self.serial_ports()
         print portList
 
