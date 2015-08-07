@@ -129,7 +129,7 @@ class UManager:
         if self.validateVal('forwardLeft', value):
             value = value * 21 / 64 # value should only go up to 21
             print "Turning left with value ", value
-            self.sendCommand(64 - value*3)
+            self.sendCommand(22 - value)
             self.sendCommand(192 + value)
 
     def forwardRight(self, params):
@@ -140,7 +140,7 @@ class UManager:
             value = value * 21 / 64 
             print "Turning right with value " , value
             self.sendCommand(64 - value)
-            self.sendCommand(192 + value*3)
+            self.sendCommand(233 + value)
 
     def reverseLeft(self, params):
         """ Send command to reverse left."""
@@ -148,7 +148,7 @@ class UManager:
         if self.validateVal('reverseLeft', value):
             value = value * 21 / 64
             print "Reversing left with value ",value
-            self.sendCommand(64+value*3)
+            self.sendCommand(107+value)
             self.sendCommand(192-value)
 
     def reverseRight(self, params):
@@ -158,7 +158,7 @@ class UManager:
             value = value * 21 / 64 
             print "Reversing right with value ",value
             self.sendCommand(64+value)
-            self.sendCommand(192-value+3)
+            self.sendCommand(150-value)
 
     def stop(self, params):
         """ Send command to stop motors."""
