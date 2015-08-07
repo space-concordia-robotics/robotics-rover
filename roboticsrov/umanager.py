@@ -92,7 +92,7 @@ class UManager:
 
             Returns: true when value is within range else false
         """
-        if direction == 'forward' or direction == "reverse" or direction == "turnLeft" or direction == "turnRight":
+        if direction == 'forward' or direction == "reverse" or direction == "forwardLeft" or direction == "forwardRight"or direction == "reverseLeft" or direction == "reverseRight":
             return True if val in range(1, 64) else False
 
         else:
