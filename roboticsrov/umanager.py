@@ -3,6 +3,8 @@ import sys
 import glob
 import time
 
+from roboticsbase_exception import RoboticsbaseException
+
 class UManager:
     # Create the serial connections we need.
     def __init__(self,
@@ -20,16 +22,16 @@ class UManager:
         self.stopbits = stopbits
         self.bytesize = bytesize
         self.uConn = None
-
         
-        # Try to connect to port. If no connection is found, verify that the user is in the 'dialout' group - this enables access to serial out.
+        # Select arduino from serial ports. If unlisted, you should verify that the user is in the 'dialout' group - this enables access to serial out.
         portList = self.serial_ports()
-        print portList
+        for index,port in enumerate(portList):
+            print index, ": ", port
 
-        if portList == None:
-            sys.exit("No ports found.") 
+        if not portList:
+            raise RoboticsbaseException("No ports found.") 
         else:
-            port_selected = int(raw_input("Which port do you want to connect to for the microcontroller? (starting from index0)"))
+            port_selected = int(raw_input("Select a port: "))
             self.port = portList[port_selected]
 
         try:
@@ -40,19 +42,18 @@ class UManager:
                                 self.parity,
                                 self.stopbits,
                                 self.timeout)
-            self.connected = True
             print "Connected to port.", self.port
         except:
-            self.connected = False
-            sys.exit("Failed connecting to port.")
+            raise RoboticsbaseException("Failed connecting to port.")
 
         print "Waiting some time for microcontroller's serial to startup..."
         time.sleep(5)	# 5 seconds
 
     def __del__(self):
-        # Close the connection.
-        if self.connected and self.uConn.isOpen():
+        # Close the connection if it exists.
+        if self.uConn and self.uConn.isOpen():
             self.uConn.close()
+            print "Port connection closed."
 
 
     def serial_ports(self):

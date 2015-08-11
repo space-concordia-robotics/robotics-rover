@@ -4,8 +4,12 @@ import roboticsrov
 
 REQUIREMENTS = [
     'pyserial>=2.7',
+    'roboticsnet'
 ]
 
+DEPENDENCY_LINKS = [
+    'https://github.com/space-concordia-robotics/robotics-networking/tarball/master#egg=roboticsnet-0.0.1'
+]
 
 setup(
     name='roboticsrov',
@@ -19,6 +23,7 @@ setup(
     author='TBD',
 
     install_requires = REQUIREMENTS,
+    dependency_links = DEPENDENCY_LINKS,
 
     packages=['roboticsrov'],
     zip_safe=False,
