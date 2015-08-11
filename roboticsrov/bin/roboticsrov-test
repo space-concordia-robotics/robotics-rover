@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 
+import sys
 import roboticsnet
 from roboticsnet.rover_listener import RoverListener
 from roboticsnet.command_hook import CommandHook
@@ -8,7 +9,11 @@ import roboticsrov
 from roboticsrov.stream_manager import start_video, stop_video 
 from roboticsrov.umanager import UManager 
 
-uManager = UManager()
+try:
+    uManager = UManager()
+except Exception as e:
+    print e.message
+    sys.exit()
 
 cmdHook = CommandHook(
     forward=uManager.forward,
