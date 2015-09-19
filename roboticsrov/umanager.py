@@ -149,8 +149,8 @@ class UManager:
         if self.validateVal('reverseLeft', value):
             value = value * 21 / 64
             print "Reversing left with value ",value
-            self.sendCommand(107+value)
-            self.sendCommand(192-value)
+            self.sendCommand(106+value)
+            self.sendCommand(191-value)
 
     def reverseRight(self, params):
         """ Send command to reverse right."""
@@ -158,7 +158,7 @@ class UManager:
         if self.validateVal('reverseRight', value):
             value = value * 21 / 64 
             print "Reversing right with value ",value
-            self.sendCommand(64+value)
+            self.sendCommand(65+value)
             self.sendCommand(150-value)
 
     def stop(self, params):
