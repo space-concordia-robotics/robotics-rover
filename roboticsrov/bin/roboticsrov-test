@@ -9,26 +9,33 @@ import roboticsrov
 from roboticsrov.stream.video_stream import VideoStream 
 from roboticsrov.umanager import UManager 
 
-try:
-    uManager = UManager()
-except Exception as e:
-    print e.message
-    
+
+ard = True
+
 try:
     webcam_stream = VideoStream('/dev/video0',8081)
 except Exception as e:
     print e.message
 
-cmdHook = CommandHook(
-    forward=uManager.forward,
-    reverse=uManager.reverse,  
-    forwardLeft=uManager.forwardLeft,
-    forwardRight=uManager.forwardRight,
-    reverseLeft=uManager.reverseLeft,
-    reverseRight=uManager.reverseRight,
-    stop=uManager.stop,
-    startVideo=webcam_stream.start,
-    stopVideo=webcam_stream.end)
+try:
+    uManager = UManager()
+    cmdHook = CommandHook(
+        forward=uManager.forward,
+        reverse=uManager.reverse,  
+        forwardLeft=uManager.forwardLeft,
+        forwardRight=uManager.forwardRight,
+        reverseLeft=uManager.reverseLeft,
+        reverseRight=uManager.reverseRight,
+        stop=uManager.stop,
+        startVideo=webcam_stream.start,
+        stopVideo=webcam_stream.end)
+except Exception as e:
+    print e.message
+    cmdHook = CommandHook(
+        startVideo=webcam_stream.start,
+        stopVideo=webcam_stream.end)
+    
+
 
 server = RoverListener(hooks=cmdHook)
 
