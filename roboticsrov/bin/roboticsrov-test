@@ -26,7 +26,7 @@ except Exception as e:
 
 print "Starting server with hooks:\n" + hookString
 
-cmdHook = CommandHook(hookString)
+exec("cmdHook = CommandHook(" + hookString + ")")
 server = RoverListener(hooks=cmdHook)
 
 print roboticsrov.__appname__, " ", roboticsrov.__version__
