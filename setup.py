@@ -4,11 +4,11 @@ import roboticsrov
 
 REQUIREMENTS = [
     'pyserial>=2.7',
-    'roboticsnet'
+    'roboticsnet==0.1.0'
 ]
 
 DEPENDENCY_LINKS = [
-    'https://github.com/space-concordia-robotics/robotics-networking.git@0.1.0'
+    'https://github.com/space-concordia-robotics/robotics-networking.git@0.1.0#egg=roboticsnet-0.1.0'
 ]
 
 setup(
