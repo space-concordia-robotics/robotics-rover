@@ -8,7 +8,7 @@ REQUIREMENTS = [
 ]
 
 DEPENDENCY_LINKS = [
-    'git+https://github.com/space-concordia-robotics/robotics-networking.git@0.1.0'
+    'https://github.com/space-concordia-robotics/robotics-networking.git@0.1.0'
 ]
 
 setup(
