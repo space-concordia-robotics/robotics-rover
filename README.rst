@@ -1,5 +1,9 @@
 ROBOTICS ROVER
-========
+==============
+
+.. image:: https://travis-ci.org/space-concordia-robotics/robotics-rover.svg
+  :target: https://travis-ci.org/space-concordia-robotics/robotics-rover
+
 
 All the rover core stuff go here.
 
