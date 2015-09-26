@@ -6,37 +6,27 @@ from roboticsnet.rover_listener import RoverListener
 from roboticsnet.command_hook import CommandHook
 
 import roboticsrov
+from roboticsrov.rover_constants import *
 from roboticsrov.stream.video_stream import VideoStream 
 from roboticsrov.umanager import UManager 
 
-
-ard = True
+hookString = ""
 
 try:
     webcam_stream = VideoStream('/dev/video0',8081)
+    hookString += generate_webcam_hook_string("webcam_stream")
 except Exception as e:
     print e.message
 
 try:
     uManager = UManager()
-    cmdHook = CommandHook(
-        forward=uManager.forward,
-        reverse=uManager.reverse,  
-        forwardLeft=uManager.forwardLeft,
-        forwardRight=uManager.forwardRight,
-        reverseLeft=uManager.reverseLeft,
-        reverseRight=uManager.reverseRight,
-        stop=uManager.stop,
-        startVideo=webcam_stream.start,
-        stopVideo=webcam_stream.end)
+    hookString += generate_motor_hook_string("uManager")
 except Exception as e:
     print e.message
-    cmdHook = CommandHook(
-        startVideo=webcam_stream.start,
-        stopVideo=webcam_stream.end)
-    
 
+print "Starting server with hooks:\n" + hookString
 
+cmdHook = CommandHook(hookString)
 server = RoverListener(hooks=cmdHook)
 
 print roboticsrov.__appname__, " ", roboticsrov.__version__

@@ -32,8 +32,7 @@ class VideoStream:
         if (self.streaming):
             print "Stream already up."
         else:
-            print "Starting stream..."
-            print self.stream_args
+            print "Trying stream at ", self.stream_args
             self.stream = subprocess.Popen(self.stream_args)
             self.streaming = True
 

@@ -3,7 +3,7 @@ import sys
 import glob
 import time
 
-from roboticsbase_exception import RoboticsbaseException
+from roboticsrov_exception import RoboticsrovException
 
 class UManager:
     # Create the serial connections we need.
@@ -29,7 +29,7 @@ class UManager:
             print index, ": ", port
 
         if not portList:
-            raise RoboticsbaseException("No ports found.") 
+            raise RoboticsrovException("No ports found.") 
         else:
             port_selected = int(raw_input("Select a port: "))
             self.port = portList[port_selected]
@@ -44,7 +44,7 @@ class UManager:
                                 self.timeout)
             print "Connected to port.", self.port
         except:
-            raise RoboticsbaseException("Failed connecting to port.")
+            raise RoboticsrovException("Failed connecting to port.")
 
         print "Waiting some time for microcontroller's serial to startup..."
         time.sleep(5)	# 5 seconds
