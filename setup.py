@@ -27,6 +27,8 @@ setup(
 
     packages=['roboticsrov'],
     zip_safe=False,
-    scripts=['roboticsrov/bin/roboticsrov-test']
+    scripts=['roboticsrov/bin/roboticsrov-test'],
+
+    test_suite="test"
 )
 
