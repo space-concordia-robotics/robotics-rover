@@ -11,6 +11,9 @@ pygame.camera.init()
 #cam location is default for linux (need to double check)
 #cam.start()
 
+def hook_snap():
+    snap_picture(1,0,1,'default')
+
 def snap_picture (NumOfPics = 1, InitialDelay = 0, Delay = 1, Title = "picture"):
     "Takes NumOfPics pictures via the webcam with a Delay between each picture.\
      Both the InitialDelay and Delay are in seconds."
@@ -29,18 +32,12 @@ def snap_picture (NumOfPics = 1, InitialDelay = 0, Delay = 1, Title = "picture")
             image = cam.get_image()
             PicName = Title + "-" + str(counter) + ".jpg"
             pygame.image.save(image, PicName) #image needs to be networked to basestation before saving
-            NumOfPics -= 1 
+            NumOfPics -= 1
             time.delay(Delay*1000)
-    else:
-        pass
     cam.stop()
-    return None
-
 
 def panorama ():
     #Get GPS location and input that as Title parameter in snap_picture
     snap_picture(6, 0, 1, "Panorama")
-    #get images from cwd and put them together 
+    #get images from cwd and put them together
     return None
-
-
