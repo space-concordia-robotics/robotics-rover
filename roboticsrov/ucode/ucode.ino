@@ -1,29 +1,16 @@
+#include <sensors.h>
 #include <TinyGPS.h>
 
 const int LED_PIN = 13;
 
+const int t_pin = 1; // temperature sensor pin
+const int v_pin = 2; // voltage sensor pin
+
 static char input[5];
 
-// Declare variables to hold the longitude and latitude readings
-long lon, lat;
-
-// Declare an instance gps of type TinyGPS
-TinyGPS gps;
-
-// Function to read longitude and latitude from GPS sensor
-void read_gps()
-{
-  while (Serial2.available())
-  {
-    int c = Serial2.read();
-    if (gps.encode(c))
-    {
-      unsigned long fix;
-      gps.get_position(&lat,&lon,&fix);
-    }
-  }
-}
-
+// Declare variables to hold the sensors' readings
+long lon, lat; // GPS data
+int voltage, temperature;
 
 void setup()
 {                
@@ -61,10 +48,12 @@ motor 2
 
 Protocol for micro <--> uManager ????
 
-recived char | Action
-"r"          | read GPS data
-otherwise    | value for movement
-...
+--------------------------------------------------------------------------
+ recived char | Action
+--------------------------------------------------------------------------
+ "r"          | read GPS and sensors data and send it to the parent board
+ otherwise    | value for movement
+-------------------------------------------------------------------------
 
 unsigned long readCommand()
 {
@@ -111,12 +100,23 @@ void loop()
     // Otherwise it's a movement value
     if (val == 'r')
     {
-      // Read gps Data
-      read_gps();
+      // Read sensors' Data
+      read_gps(lon, lat); // read GPS
+      temperature = read_temperature(t_pin);
+      voltage = read_voltage(v_pin);
+      
+      /* The values of voltage and temperature right now are just
+       the output of the ADC. They should be converted to their 
+       actual values but thta depends on the range that the sensors
+       can read. For example, a temperature reading of 1024 should
+       mapped to +100 degrees if the max of the sensor is +100 */
+      
       // Send data to parent board.
       // The first part of the sentence i.e. "lat: " is for debugging
       Serial.print("lat: "); Serial.println(lat);
       Serial.print("lon: "); Serial.println(lon);
+      Serial.print("temperature: "); Serial.println(temperature);
+      Serial.print("voltage:"); Serial.println(voltage);
     }
     else
     {    
