@@ -1,6 +1,29 @@
+#include <TinyGPS.h>
+
 const int LED_PIN = 13;
 
 static char input[5];
+
+// Declare variables to hold the longitude and latitude readings
+long lon, lat;
+
+// Declare an instance gps of type TinyGPS
+TinyGPS gps;
+
+// Function to read longitude and latitude from GPS sensor
+void read_gps()
+{
+  while (Serial2.available())
+  {
+    int c = Serial2.read();
+    if (gps.encode(c))
+    {
+      unsigned long fix;
+      gps.get_position(&lat,&lon,&fix);
+    }
+  }
+}
+
 
 void setup()
 {                
@@ -11,6 +34,9 @@ void setup()
   Serial.begin(9600);  
   // Usart to control the left side of motors
   Serial1.begin(9600);
+  
+  // Initialize Serial2 to communicate with the GPS sensor
+  Serial2.begin(4800);
 }
 
 /* 
@@ -57,7 +83,7 @@ unsigned long readCommand()
 
 void loop()
 {
- 
+   
   if (Serial.available() > 0)
 //      Serial1.available() > 0) //&&
  //     Serial2.available() > 0)
@@ -78,12 +104,24 @@ void loop()
   
    
     int val = Serial.read();
-
+    
+    // If we receive 'r' then read the GPS data 
+    //otherwise it's a movement value
+    if (val == 'r')
+    {
+      // Read gps Data
+      read_gps();
+      // Send data to parent board.
+      // The first part of the sentence i.e. "lat: " is for debugging
+      Serial.print("lat: "); Serial.println(lat);
+      Serial.print("lon: "); Serial.println(lon);
+    }
+    else
+    {
     // Write back to serial port for debugging
     Serial.println(val);
     // Write value to motors
-    Serial1.write(val); 
-    
+    Serial1.write(val);
+    } 
   }
 }
-  
