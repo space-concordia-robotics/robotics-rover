@@ -7,14 +7,16 @@ from roboticsnet.command_hook import CommandHook
 
 import roboticsrov
 from roboticsrov.rover_constants import *
-from roboticsrov.stream.video_stream import VideoStream 
-from roboticsrov.umanager import UManager 
+from roboticsrov.stream.video_stream import VideoStream
+from roboticsrov.umanager import UManager
+from roboticsrov.snap_picture_function import snap_picture
 
 hookString = ""
 
 try:
     webcam_stream = VideoStream('/dev/video0',8081)
     hookString += generate_webcam_hook_string("webcam_stream")
+    hookString += "snapshot=snap_picture()"
 except Exception as e:
     print e.message
 
