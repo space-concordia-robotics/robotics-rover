@@ -33,6 +33,7 @@ def snap_picture (NumOfPics = 1, InitialDelay = 0, Delay = 1, Title = "picture")
             time.delay(Delay*1000)
     else:
         pass
+    cam.quit()
     return None
 
 
