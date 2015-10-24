@@ -33,13 +33,13 @@ def snap_picture (NumOfPics = 1, InitialDelay = 0, Delay = 1, Title = "picture")
             time.delay(Delay*1000)
     else:
         pass
-    return null
+    return None
 
 
 def panorama ():
     #Get GPS location and input that as Title parameter in snap_picture
     snap_picture(6, 0, 1, "Panorama")
     #get images from cwd and put them together 
-    return null
+    return None
 
 
