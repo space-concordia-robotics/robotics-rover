@@ -28,7 +28,7 @@ void read_gps()
 void setup()
 {                
   // Initialize the digital pin as an output.
-  pinMode(LED_PIN, OUTPUT);   
+  pinMode(LED_PIN, OUTPUT); 
 
   // Usart to talk to and from the parent board.
   Serial.begin(9600);  
@@ -61,8 +61,9 @@ motor 2
 
 Protocol for micro <--> uManager ????
 
-"m" + value for movement
-"r" + sensor to read sensor data  or have a timed interval to send data to  uManager
+recived char | Action
+"r"          | read GPS data
+otherwise    | value for movement
 ...
 
 unsigned long readCommand()
@@ -83,6 +84,7 @@ unsigned long readCommand()
 
 void loop()
 {
+  digitalWrite(LED_PIN, HIGH);
    
   if (Serial.available() > 0)
 //      Serial1.available() > 0) //&&
@@ -106,7 +108,7 @@ void loop()
     int val = Serial.read();
     
     // If we receive 'r' then read the GPS data 
-    //otherwise it's a movement value
+    // Otherwise it's a movement value
     if (val == 'r')
     {
       // Read gps Data
@@ -117,11 +119,11 @@ void loop()
       Serial.print("lon: "); Serial.println(lon);
     }
     else
-    {
+    {    
     // Write back to serial port for debugging
     Serial.println(val);
     // Write value to motors
     Serial1.write(val);
-    } 
+    }
   }
 }
