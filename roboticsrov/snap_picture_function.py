@@ -19,13 +19,14 @@ def snap_picture (NumOfPics = 1, InitialDelay = 0, Delay = 1, Title = "picture")
     if NumOfPics == 1:
         time.delay(InitialDelay*1000)
         image = cam.get_image()
-        pygame.image.save(image, Title)
+        PicName = Title + ".jpg"
+        pygame.image.save(image, PicName)
     elif NumOfPics > 1:
         time.delay(InitialDelay*1000)
         while (NumOfPics > 0):
             counter +=1
             image = cam.get_image()
-            PicName = Title + str(counter)
+            PicName = Title + str(counter) + ".jpg"
             #create string that holds pictures names (e.g. pic1, pic2, pic3, pic4, etc)
             pygame.image.save(image, PicName)
             NumOfPics -= 1 
