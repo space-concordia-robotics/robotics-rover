@@ -87,15 +87,12 @@ class UManager:
 
         return result
     
-    def validateVal(self, direction, val):
+    def validateVal(self, val):
         """ Validates the value before being sent to 
             the microcontroller.
-
-            Returns: true when value is within range else false
         """
-        if direction == 'forward' or direction == "reverse" or direction == "forwardLeft" or direction == "forwardRight"or direction == "reverseLeft" or direction == "reverseRight":
-            return True if val in range(1, 64) else False
-
+        if val in range(1, 64):
+            return True
         else:
             print "Wtf. What are you doing here? Value out of range."
             return False
@@ -109,7 +106,7 @@ class UManager:
         """ Send command to move forward. """
         value = params['value']
 
-        if self.validateVal('forward', value):
+        if self.validateVal(value):
             print "Moving forward by ", value
             self.sendCommand(64 - value)
             self.sendCommand(value + 192)
@@ -118,7 +115,7 @@ class UManager:
         """ Send command to reverse. """
         value = params['value']
 
-        if self.validateVal('reverse', value):
+        if self.validateVal(value):
             print "Reversing by ", value
             self.sendCommand(value + 64)
             self.sendCommand((64 - value) + 128)
@@ -127,7 +124,7 @@ class UManager:
         """ Send command to turn left. """
         value = params['value']
 
-        if self.validateVal('forwardLeft', value):
+        if self.validateVal(value):
             value = value * 21 / 64 # value should only go up to 21
             print "Turning left with value ", value
             self.sendCommand(22 - value)
@@ -137,7 +134,7 @@ class UManager:
         """ Send command to turn right."""
         value = params['value']
 
-        if self.validateVal('forwardRight', value):
+        if self.validateVal(value):
             value = value * 21 / 64 
             print "Turning right with value " , value
             self.sendCommand(64 - value)
@@ -146,7 +143,7 @@ class UManager:
     def reverseLeft(self, params):
         """ Send command to reverse left."""
         value = params['value']
-        if self.validateVal('reverseLeft', value):
+        if self.validateVal(value):
             value = value * 21 / 64
             print "Reversing left with value ",value
             self.sendCommand(106+value)
@@ -155,13 +152,13 @@ class UManager:
     def reverseRight(self, params):
         """ Send command to reverse right."""
         value = params['value']
-        if self.validateVal('reverseRight', value):
+        if self.validateVal(value):
             value = value * 21 / 64 
             print "Reversing right with value ",value
             self.sendCommand(65+value)
             self.sendCommand(150-value)
 
-    def stop(self, params):
+    def stop(self):
         """ Send command to stop motors."""
         print "Stopping motors."
         self.sendCommand(0)
