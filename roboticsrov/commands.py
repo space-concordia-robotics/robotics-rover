@@ -2,6 +2,7 @@ from stream.video_stream import VideoStream
 from umanager import UManager
 import roboticsnet
 from roboticsnet.command_validator import *
+from roboticsnet.gateway_constants import *
 
 
 class Commands:
@@ -17,7 +18,7 @@ class Commands:
         except Exception as e:
             print e.message
 
-    def execute(bytes):
+    def execute(self, bytes):
         cmd = ord(bytes[0])
         
         if cmd in range(0x01,0x07):
