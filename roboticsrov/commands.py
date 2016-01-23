@@ -23,7 +23,7 @@ class Commands:
         
         if cmd in range(0x01,0x07):
             value = ord(bytes[1])
-            timediff = ord(calculate_time_diff(bytes[2]))
+            timediff = calculate_time_diff(ord(bytes[2]))
         
         
         if cmd == ROBOTICSNET_DRIVE_FORWARD:
