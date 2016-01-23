@@ -7,7 +7,7 @@ REQUIREMENTS = [
 ]
 
 DEPENDENCY_LINKS = [
-    'https://github.com/space-concordia-robotics/robotics-networking/tarball/master#egg=roboticsnet-0.1.0'
+    'https://github.com/space-concordia-robotics/robotics-networking/tarball/master#egg=roboticsnet-0.1.0', 'https://github.com/space-concordia-robotics/robotics-logger/tarball/master#egg=roboticslogger-0.0.1'
 ]
 
 setup(

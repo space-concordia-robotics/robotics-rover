@@ -1,34 +1,31 @@
 #!/usr/bin/env python2.7
 
-import sys
+from multiprocessing import Queue, Event
 import roboticsnet
-from roboticsnet.rover_listener import RoverListener
-from roboticsnet.command_hook import CommandHook
-
 import roboticsrov
-from roboticsrov.rover_constants import *
-from roboticsrov.stream.video_stream import VideoStream 
-from roboticsrov.umanager import UManager 
+import threading
+from roboticsnet.rover_listener import RoverListener
+from roboticsnet.udp_listener import UdpListener
+from roboticsrov.commands import Commands
 
-hookString = ""
 
-try:
-    webcam_stream = VideoStream('/dev/video0',8081)
-    hookString += generate_webcam_hook_string("webcam_stream")
-except Exception as e:
-    print e.message
+commands = Commands()
+tcpserver = RoverListener(hook=commands)
+udpserver = UdpListener(hook=commands)
 
-try:
-    uManager = UManager()
-    hookString += generate_motor_hook_string("uManager")
-except Exception as e:
-    print e.message
 
-print "Starting server with hooks:\n" + hookString
-
-exec("cmdHook = CommandHook(" + hookString + ")")
-server = RoverListener(hooks=cmdHook)
-
-print roboticsrov.__appname__, " ", roboticsrov.__version__
 print "Starting command dispatcher..."
-server.listen()
+t1 = threading.Thread(target=tcpserver.start, args=())
+t2 = threading.Thread(target=udpserver.start, args=())
+
+t1.daemon=True
+t2.daemon=True
+
+t1.start()
+t2.start()
+
+try:
+    while t1.is_alive():
+        pass
+except(KeyboardInterrupt):
+    print "Quitting..."
