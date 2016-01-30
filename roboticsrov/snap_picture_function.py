@@ -17,9 +17,6 @@ import os
 ##mergename is the final name for the panorama
 def merge (Images, mergeName):
 
-
-
-
     OpenImages = []
     for x in Images:
         OpenImages[Images.index(x)] = Image.open(x)
@@ -97,6 +94,11 @@ def panorama (Title = "pano1"):
     #pull images from where they've been saved and put them in a list
     #that list is the first argument in the merge() function below
     parts = []
+    pics = 6
+    counter = 1
+    while counter <= pics:
+        parts.append(Title + "-" + str(counter) + ".jpg")
+        counter += 1
     merge(parts,Title)
     return None
 
