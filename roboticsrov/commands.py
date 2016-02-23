@@ -3,6 +3,8 @@ from umanager import UManager
 import roboticsnet
 from roboticsnet.command_validator import *
 from roboticsnet.gateway_constants import *
+from snap_picture_function import *
+
 
 
 class Commands:
@@ -25,38 +27,39 @@ class Commands:
             value = ord(bytes[1])
             timediff = calculate_time_diff(ord(bytes[2]))
         
-        
-        if cmd == ROBOTICSNET_DRIVE_FORWARD:
+        if cmd == DRIVE_FORWARD:
             self.umanager.forward({'value':value, 'timediff':timediff})
             
-        elif cmd == ROBOTICSNET_DRIVE_REVERSE:
+        elif cmd == DRIVE_REVERSE:
             self.umanager.reverse({'value':value, 'timediff':timediff})
         
-        elif cmd == ROBOTICSNET_DRIVE_FORWARDLEFT:
+        elif cmd == DRIVE_FORWARDLEFT:
             self.umanager.forwardleft({'value':value, 'timediff':timediff})
         
-        elif cmd == ROBOTICSNET_DRIVE_FORWARDRIGHT:
+        elif cmd == DRIVE_FORWARDRIGHT:
             self.umanager.forwardright({'value':value, 'timediff':timediff})
         
-        elif cmd == ROBOTICSNET_DRIVE_REVERSELEFT:
+        elif cmd == DRIVE_REVERSELEFT:
             self.umanager.reverseleft({'value':value, 'timediff':timediff})
         
-        elif cmd == ROBOTICSNET_DRIVE_REVERSERIGHT:
+        elif cmd == DRIVE_REVERSERIGHT:
             self.umanager.reverseright({'value':value, 'timediff':timediff})
         
-        elif cmd == ROBOTICSNET_DRIVE_STOP:
+        elif cmd == DRIVE_STOP:
             self.umanager.stop({'timediff':ord(calculate_time_diff(bytes[1]))})
         
-        elif cmd == ROBOTICSNET_CAMERA_START_VID:
+        elif cmd == CAMERA_START_VID:
             self.webcam_stream.start()
         
-        elif cmd == ROBOTICSNET_CAMERA_START_VID:
+        elif cmd == CAMERA_START_VID:
             self.webcam_stream.end()
+            
+        elif cmd == CAMERA_SNAPSHOT:
+            print "calling snapshot"
+            img = snapshot()
+            return img
         
-        elif cmd == ROBOTICSNET_CAMERA_SNAPSHOT:
-            pass
-        
-        elif cmd == ROBOTICSNET_CAMERA_PANORAMICSNAPSHOT:
+        elif cmd == CAMERA_PANORAMICSNAPSHOT:
             pass
         
         
