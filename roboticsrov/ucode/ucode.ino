@@ -1,11 +1,15 @@
-const int LED_PIN = 13;
+const int OUT_PIN_1 = 13;
+const int OUT_PIN_2 = 14;
+const int OUT_PIN_3 = 15;
 
 static char input[5];
 
 void setup()
 {                
   // Initialize the digital pin as an output.
-  pinMode(LED_PIN, OUTPUT);   
+  pinMode(OUT_PIN_1, OUTPUT);   
+  pinMode(OUT_PIN_2, OUTPUT);
+  pinMode(OUT_PIN_2, OUTPUT);
 
   // Usart to talk to and from the parent board.
   Serial.begin(9600);  
@@ -82,7 +86,9 @@ void loop()
     // Write back to serial port for debugging
     Serial.println(val);
     // Write value to motors
-    Serial1.write(val); 
+    analogWrite(OUT_PIN_1, val);
+    analogWrite(OUT_PIN_2, val);
+    analogWrite(OUT_PIN_3, val);
     
   }
 }

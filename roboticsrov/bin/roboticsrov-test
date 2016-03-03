@@ -11,18 +11,14 @@ from roboticsrov.commands import Commands
 
 commands = Commands()
 tcpserver = RoverListener(hook=commands)
-udpserver = UdpListener(hook=commands)
 
 
 print "Starting command dispatcher..."
 t1 = threading.Thread(target=tcpserver.start, args=())
-t2 = threading.Thread(target=udpserver.start, args=())
 
 t1.daemon=True
-t2.daemon=True
 
 t1.start()
-t2.start()
 
 try:
     while t1.is_alive():
