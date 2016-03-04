@@ -1,12 +1,14 @@
 const int OUT_PIN_1 = 13;
 const int OUT_PIN_2 = 14;
 const int OUT_PIN_3 = 15;
+const int LED_OUTPUT = 12;
 
 static char input[5];
 
 void setup()
 {                
   // Initialize the digital pin as an output.
+  pinMode(LED_OUTPUT,OUTPUT);
   pinMode(OUT_PIN_1, OUTPUT);   
   pinMode(OUT_PIN_2, OUTPUT);
   pinMode(OUT_PIN_2, OUTPUT);
