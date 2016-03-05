@@ -25,6 +25,7 @@ class UManager:
         
         # Select arduino from serial ports. If unlisted, you should verify that the user is in the 'dialout' group - this enables access to serial out.
         portList = self.serial_ports()
+        portList = [x for x in portList if "ACM" in x]
         for index,port in enumerate(portList):
             print index, ": ", port
 
@@ -120,43 +121,23 @@ class UManager:
             self.sendCommand(value + 64)
             self.sendCommand((64 - value) + 128)
 
-    def forwardLeft(self, params):
+    def left(self, params):
         """ Send command to turn left. """
         value = params['value']
 
         if self.validateVal(value):
-            value = value * 21 / 64 # value should only go up to 21
             print "Turning left with value ", value
-            self.sendCommand(22 - value)
-            self.sendCommand(192 + value)
+            self.sendCommand(64 -  value)
+            self.sendCommand(192 - value)
 
-    def forwardRight(self, params):
+    def right(self, params):
         """ Send command to turn right."""
         value = params['value']
 
         if self.validateVal(value):
-            value = value * 21 / 64 
             print "Turning right with value " , value
-            self.sendCommand(64 - value)
-            self.sendCommand(233 + value)
-
-    def reverseLeft(self, params):
-        """ Send command to reverse left."""
-        value = params['value']
-        if self.validateVal(value):
-            value = value * 21 / 64
-            print "Reversing left with value ",value
-            self.sendCommand(106+value)
-            self.sendCommand(191-value)
-
-    def reverseRight(self, params):
-        """ Send command to reverse right."""
-        value = params['value']
-        if self.validateVal(value):
-            value = value * 21 / 64 
-            print "Reversing right with value ",value
-            self.sendCommand(65+value)
-            self.sendCommand(150-value)
+            self.sendCommand(64 + value)
+            self.sendCommand(192 + value)
 
     def stop(self):
         """ Send command to stop motors."""

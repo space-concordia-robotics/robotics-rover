@@ -23,7 +23,7 @@ class Commands:
     def execute(self, bytes):
         cmd = ord(bytes[0])
         
-        if cmd in range(0x01,0x07):
+        if cmd in range(0x01,0x05):
             value = ord(bytes[1])
             timediff = calculate_time_diff(ord(bytes[2]))
         
@@ -33,17 +33,11 @@ class Commands:
         elif cmd == DRIVE_REVERSE:
             self.umanager.reverse({'value':value, 'timediff':timediff})
         
-        elif cmd == DRIVE_FORWARDLEFT:
-            self.umanager.forwardleft({'value':value, 'timediff':timediff})
+        elif cmd == DRIVE_LEFT:
+            self.umanager.left({'value':value, 'timediff':timediff})
         
-        elif cmd == DRIVE_FORWARDRIGHT:
-            self.umanager.forwardright({'value':value, 'timediff':timediff})
-        
-        elif cmd == DRIVE_REVERSELEFT:
-            self.umanager.reverseleft({'value':value, 'timediff':timediff})
-        
-        elif cmd == DRIVE_REVERSERIGHT:
-            self.umanager.reverseright({'value':value, 'timediff':timediff})
+        elif cmd == DRIVE_RIGHT:
+            self.umanager.right({'value':value, 'timediff':timediff})
         
         elif cmd == DRIVE_STOP:
             self.umanager.stop({'timediff':ord(calculate_time_diff(bytes[1]))})
