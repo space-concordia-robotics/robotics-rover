@@ -37,7 +37,7 @@ def merge (Images, mergeName):
     #Saving the panorama
     Panorama.save(mergeName + ".jpg")
     
-    return Panorama
+    return Panorama #Panorama is a PIL image object
 
 
 
@@ -52,7 +52,6 @@ def snapshot (InitialDelay = 0, Delay = 1, Title = "picture", Folder = "folder")
     cam = pygame.camera.Camera("/dev/video0",(640,480)) #resolution of camera needs to be confirmed
     cam.start()
     counter = 0
-
     time.delay(InitialDelay*1000)
     image = cam.get_image()
     PicName = Title + ".jpg"
@@ -70,14 +69,13 @@ def snapshot (InitialDelay = 0, Delay = 1, Title = "picture", Folder = "folder")
     finally:
         newpath = os.getcwd() + "/" + Folder
     shutil.move(source, newpath)
-
     cam.stop()
-    return None
+    return image
 
 
 
 def panorama (Title = "pano", Folder = "PanoFolder"):
-    #assumes the camera rotates clockwise
+    #assumes the camera rotates CLOCKWISE
     #Get GPS location and input that as Title parameter in snap_picture
     cam = pygame.camera.Camera("/dev/video0",(640,480)) #resolution of camera needs to be confirmed
     cam.start()
@@ -109,6 +107,7 @@ def panorama (Title = "pano", Folder = "PanoFolder"):
     while counter <= picsToApend:
         AllParts.append(Folder + "/" + Title + "-" + str(counter) + ".jpg")
         counter += 1
+        
     return merge(AllParts,Title)
 
 
