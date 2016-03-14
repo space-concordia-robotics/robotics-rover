@@ -16,7 +16,7 @@ log_parent, log_child = Pipe()
 p = Process(target = rover_logger.run, args=(log_child,))
 p.start()
 
-commands = Commands()
+commands = Commands(log_parent)
 tcpserver = RoverListener(hook=commands)
 udpserver = UdpListener(hook=commands)
 
@@ -34,6 +34,6 @@ try:
     while t1.is_alive():
         pass
 except(KeyboardInterrupt):
-    print "Quitting..."
+    log_parent.send(["warn","Quitting..."])
 
 log_parent.send(["done"])
