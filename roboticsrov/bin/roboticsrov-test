@@ -1,20 +1,26 @@
 #!/usr/bin/env python2.7
 
-from multiprocessing import Queue, Event
+from multiprocessing import Process, Pipe, Queue, Event
+
 import roboticsnet
 import roboticsrov
 import threading
 from roboticsnet.rover_listener import RoverListener
 from roboticsnet.udp_listener import UdpListener
 from roboticsrov.commands import Commands
+from roboticslogger.logger import Logger
 
+# Logger setup
+rover_logger = Logger("rover_bin")
+log_parent, log_child = Pipe()
+p = Process(target = rover_logger.run, args=(log_child,))
+p.start()
 
-commands = Commands()
+commands = Commands(log_parent)
 tcpserver = RoverListener(hook=commands)
 udpserver = UdpListener(hook=commands)
 
-
-print "Starting command dispatcher..."
+log_parent.send(["info","Starting command dispatcher..."])
 t1 = threading.Thread(target=tcpserver.start, args=())
 t2 = threading.Thread(target=udpserver.start, args=())
 
@@ -28,4 +34,6 @@ try:
     while t1.is_alive():
         pass
 except(KeyboardInterrupt):
-    print "Quitting..."
+    log_parent.send(["warn","Quitting..."])
+
+log_parent.send(["done"])
