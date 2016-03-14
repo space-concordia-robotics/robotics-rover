@@ -1,5 +1,5 @@
 import subprocess
-from stream_constants import *
+from camera_constants import *
 
 class VideoStream:
     """

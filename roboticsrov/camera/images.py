@@ -1,19 +1,22 @@
+import sys
+import os
+import shutil
 import pygame
 import pygame.camera
 from pygame.locals import *
 from pygame import time
-
-import sys
 from PIL import Image
+from multiprocessing import Process, Pipe
 
-import os
-import shutil
+from roboticsrov.rover_utils import get_data_path
+from roboticsrov.roboticsrov_exception import RoboticsrovException
+from roboticslogger.logger import Logger
 
-def file_exists_increment_counter(file_path, file_type, logger):
+def get_unique_path(file_path, file_type):
     """ Check if a file already exists. If so, increment a counter and try again until it doesn't. Return that final path. """
 
-    picture_exists = os.path.isfile(file_path + file_type)
     image_counter = 0
+    picture_exists = os.path.isfile(file_path + str(image_counter) + file_type)
 
     while picture_exists:
         image_counter += 1
@@ -21,23 +24,22 @@ def file_exists_increment_counter(file_path, file_type, logger):
 
     return file_path + str(image_counter) + file_type
 
-def get_camera(camera_id, logger):
+def get_camera(camera_id):
     """ Get the 'camera_id'th camera"""
+
     cam_list = []
     for device in os.listdir('/dev'):
         if device.startswith('video'):
             cam_list.append(device)
 
     if camera_id in range(len(cam_list)):
-        logger.send(["info","Got camera at #{0}: {1}".format(camera_id, cam_list[camera_id])])
         return cam_list[camera_id]
     else:
-        logger.send(["err","Could not find camera #{0}".format(camera_id)])
         return None
 
-
-def merge (Images, mergeName, file_type, logger):
+def merge (Images, mergeName, file_type):
     """ Merge a number of images from a list """
+
     OpenImages = []
     for x in Images:
         OpenImages.append(Image.open(x))
@@ -54,44 +56,48 @@ def merge (Images, mergeName, file_type, logger):
     for x,img in zip(range(len(OpenImages)),OpenImages):
         Panorama.paste(img,(origwidth*x,0))
 
-    path = get_data_path('pictures', logger)
+    path = get_data_path('pictures')
 
-    image_path = file_exists_increment_counter(os.path.join(path, mergeName), file_type, logger) 
+    image_path = get_unique_path(os.path.join(path, mergeName), file_type) 
 
     #Saving the panorama
-    Panorama.save(image_path)
+    try:
+        Panorama.save(image_path)
+    except Exception as e:
+        logger.send(["err","Error on save panorama to " + image_path + "\n\t" + e.message])
+        image_path = None
     
     return image_path
 
-def snapshot (title = "picture", camera_id = 0, resolution=(640, 480), filetype=".jpg", logger):
-    """ Take a snapshot, save to disk, and return the image path """
+def snapshot (logger, title = "picture", camera_id = 0, resolution=(640, 480), filetype=".jpg"):
+    """ Take a snapshot, save to disk, and return the image path.
+        Raises RoboticsrovException if no camera found. """
 
     # init
     pygame.camera.init()
-    cam = pygame.camera.Camera(os.path.join("/dev", get_camera(camera_id)), resolution)
+    camera_device = get_camera(camera_id)
+    if camera_device:
+        logger.send(["info","Taking snapshot with camera {0}".format(camera_device)])
+    else:
+        logger.send(["err","No camera detected! Cancelling snapshot."])
+        raise RoboticsrovException("No camera available.")
+
+    cam = pygame.camera.Camera(os.path.join("/dev", camera_device), resolution)
     cam.start()
     
     # take the picture
     image = cam.get_image()
 
     # get/make path for image
-    image_path = get_data_path('pictures', logger)
-    
-    # get counter if image already exists
-    file_exists_increment_counter
-    picture_exists = False
-    image_counter = 0
-    while not picture_exists:
-        image_counter += 1
-        picture_exists = not os.path.isfile(os.path.join(image_path, title + str(image_counter) + filetype))
-
-    full_path = os.path.join(image_path, title + str(image_counter) + filetype)
+    image_path = get_data_path('pictures')
+    full_path = get_unique_path(os.path.join(image_path, title), filetype)
     
     # save image locally
     try:
         pygame.image.save(image, full_path)
     except Exception as e:
         logger.send(["err", "Error on try to save image to " + full_path + "\n\t" + e.message])
+        full_path = None
     
     # deinit
     cam.stop()
@@ -99,16 +105,29 @@ def snapshot (title = "picture", camera_id = 0, resolution=(640, 480), filetype=
     
     return full_path
 
-def panorama (title = "panoramic", camera_id = 0, camera_resolution=(640, 480), filetype=".jpg", logger):
+def panorama (logger, title = "panoramic", camera_id = 0, camera_resolution=(640, 480), filetype=".jpg"):
     """ Take a panoramic image, save to disk, and return the image """
 
     Delay = 2
     NumOfPics = 6
     AllParts = []
+    x = 0
 
     while (x < NumOfPics):
-        AllParts.append(snapshot(title+str(NumOfPics), camera_id, camera_resolution, filetype))
+        AllParts.append(snapshot(logger, title+"_segment_"+str(x), camera_id, camera_resolution, filetype))
         x += 1
         time.delay(Delay*1000)
 
-    return merge(AllParts, title)
+    return merge(AllParts, title, filetype)
+
+if __name__ == "__main__":
+    logger = Logger("snapshot")
+    parent_conn, child_conn = Pipe()
+
+    p = Process(target=logger.run, args=(child_conn,))
+    p.start()
+
+    print snapshot(parent_conn)
+    print panorama(parent_conn)
+
+    parent_conn.send(["done"])
