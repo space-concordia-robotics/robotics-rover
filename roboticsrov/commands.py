@@ -1,9 +1,9 @@
-from stream.video_stream import VideoStream
 from umanager import UManager
+from camera.images import snapshot, panorama
+from camera.video_stream import VideoStream
 import roboticsnet
 from roboticsnet.command_validator import *
 from roboticsnet.gateway_constants import *
-from roboticsrov.camera.images import snapshot, panoramic
 
 
 
@@ -50,10 +50,11 @@ class Commands:
         elif cmd == CAMERA_START_VID:
             self.webcam_stream.end()
 
+        # TODO: return image using roboticsnet
         elif cmd == CAMERA_SNAPSHOT:
             path = snapshot()
             return path
 
         elif cmd == CAMERA_PANORAMICSNAPSHOT:
-            path = panoramic()
+            path = panorama()
             return path

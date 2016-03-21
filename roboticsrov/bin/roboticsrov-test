@@ -6,7 +6,6 @@ import roboticsnet
 import roboticsrov
 import threading
 from roboticsnet.rover_listener import RoverListener
-from roboticsnet.udp_listener import UdpListener
 from roboticsrov.commands import Commands
 from roboticslogger.logger import Logger
 
