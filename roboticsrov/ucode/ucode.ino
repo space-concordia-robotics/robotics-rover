@@ -13,26 +13,26 @@ long lon, lat; // GPS data
 int voltage, temperature;
 
 void setup()
-{                
+{
   // Initialize the digital pin as an output.
-  pinMode(LED_PIN, OUTPUT); 
+  pinMode(LED_PIN, OUTPUT);
 
   // Usart to talk to and from the parent board.
-  Serial.begin(9600);  
+  Serial.begin(9600);
   // Usart to control the left side of motors
   Serial1.begin(9600);
-  
+
   // Initialize Serial2 to communicate with the GPS sensor
   Serial2.begin(4800);
 }
 
-/* 
-simpified serial motor mode 
+/*
+simpified serial motor mode
 switch left to right 011100
 (0 = up)
 
 motor 1
-1 reverse 
+1 reverse
 64 stop
 127 forward
 
@@ -62,7 +62,7 @@ unsigned long readCommand()
     byte b[4];
     unsigned long ulval;
   } u;
-  
+
   u.b[0] = Serial.read();
   u.b[1] = Serial.read();
   u.b[2] = Serial.read();
@@ -74,29 +74,29 @@ unsigned long readCommand()
 void loop()
 {
   digitalWrite(LED_PIN, HIGH);
-   
+
   if (Serial.available() > 0)
 //      Serial1.available() > 0) //&&
  //     Serial2.available() > 0)
   {
-    
+
 //    int command = Serial.parseInt();
 //    static char c = Serial.read();
 //    static char c = Serial.read();
-    
+
 //    int command = atoi(&c);
-     
-     
+
+
     // Send command back to parent board.
 //    Serial.println(command, DEC);
     // Update command to motors.
 //    Serial1.write(command);
 //    Serial2.write(command);
-  
-   
+
+
     int val = Serial.read();
-    
-    // If we receive 'r' then read the GPS data 
+
+    // If we receive 'r' then read the GPS data
     // Otherwise it's a movement value
     if (val == 'r')
     {
@@ -104,13 +104,13 @@ void loop()
       read_gps(lon, lat); // read GPS
       temperature = read_temperature(t_pin);
       voltage = read_voltage(v_pin);
-      
+
       /* The values of voltage and temperature right now are just
-       the output of the ADC. They should be converted to their 
+       the output of the ADC. They should be converted to their
        actual values but thta depends on the range that the sensors
        can read. For example, a temperature reading of 1024 should
        mapped to +100 degrees if the max of the sensor is +100 */
-      
+
       // Send data to parent board.
       // The first part of the sentence i.e. "lat: " is for debugging
       Serial.print("lat: "); Serial.println(lat);
@@ -119,7 +119,7 @@ void loop()
       Serial.print("voltage:"); Serial.println(voltage);
     }
     else
-    {    
+    {
     // Write back to serial port for debugging
     Serial.println(val);
     // Write value to motors

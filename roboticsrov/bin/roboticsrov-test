@@ -6,7 +6,6 @@ import roboticsnet
 import roboticsrov
 import threading
 from roboticsnet.rover_listener import RoverListener
-from roboticsnet.udp_listener import UdpListener
 from roboticsrov.commands import Commands
 from roboticslogger.logger import Logger
 
@@ -18,17 +17,13 @@ p.start()
 
 commands = Commands(log_parent)
 tcpserver = RoverListener(hook=commands)
-udpserver = UdpListener(hook=commands)
 
 log_parent.send(["info","Starting command dispatcher..."])
 t1 = threading.Thread(target=tcpserver.start, args=())
-t2 = threading.Thread(target=udpserver.start, args=())
 
 t1.daemon=True
-t2.daemon=True
 
 t1.start()
-t2.start()
 
 try:
     while t1.is_alive():
